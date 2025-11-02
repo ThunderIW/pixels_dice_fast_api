@@ -16,8 +16,11 @@ This project was created to help interact with the [Pixels dice](https://gamewit
 
 <img width="1198" height="939" alt="image" src="https://github.com/user-attachments/assets/1a882f20-ca6c-45f5-bea3-3af33c87dfc6" />
 
-## Return data
-```json
+## Requirements
+you need to have the pixels app on your device:
+1. go into the dice setting and select **When dice is rolled**
+2. Select the web icon and create a new event
+3. in the web request event select json and in the **Send request to URL** type https://pixels-dice-api.onrender.com/pixels
 
 
 
