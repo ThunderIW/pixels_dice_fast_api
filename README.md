@@ -1,4 +1,4 @@
-# Piexels DICE FastAPI
+# Piexls DICE FastAPI
 This is a RESTful API for interacting with the Pixels electronic dice, allowing for the retrieval of dice information, such as the dice value rolled, battery level, and other monitoring features.
 
 # Background
