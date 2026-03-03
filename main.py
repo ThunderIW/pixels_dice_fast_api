@@ -2,7 +2,7 @@
 import socket
 
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
 from fastapi.responses import JSONResponse, PlainTextResponse
 import pydantic
 import subprocess
@@ -13,6 +13,7 @@ import pendulum
 from pydantic import BaseModel
 
 app = FastAPI()
+connected_clients: list[WebSocket] = []
 characters=[]
 
 @app.get("/")
@@ -34,8 +35,25 @@ async def get_dice_info(request: Request):
     print(len(rolls))
     if len(rolls)<=1:
         rolls.append(face_value)
+    # Broadcast to all connected WebSocket clients
+    for client in connected_clients.copy():
+        try:
+            await client.send_json(data)
+        except Exception:
+            connected_clients.remove(client)
+
     return {"status": "ok", "received": data}
 
+
+@app.websocket("/ws/rolls")
+async def websocket_rolls(ws: WebSocket):
+    await ws.accept()
+    connected_clients.append(ws)
+    try:
+        while True:
+            await ws.receive_text()  # Keep connection alive
+    except WebSocketDisconnect:
+        connected_clients.remove(ws)
 
 
 class DnDCharacter(BaseModel):
